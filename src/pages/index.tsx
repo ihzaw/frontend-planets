@@ -1,20 +1,68 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import styled from 'styled-components';
 import styles from '../styles/Home.module.css';
+import { ScrollList } from 'components';
+import HeartFilled from '../assets/svgs/heart-solid.svg';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-const MainStyled = styled.main`
+export type Planet = {
+  name: string;
+  diameter: string;
+  rotation_period: string;
+  orbital_period: string;
+  gravity: string;
+  population: string;
+  climate: string;
+  terrain: string;
+  surface_water: string;
+  residents: string[];
+  films: string[];
+  url: string;
+  created: string;
+  edited: string;
+};
+
+export interface PlanetList {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Planet[];
+}
+
+export const MainStyled = styled.main`
   align-items: center;
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: center;
+  font-family: monospace;
   min-height: 100vh;
   padding: 4rem 0;
 `;
 
-const Home: NextPage = () => {
+const WishListButton = styled.button`
+  align-items: center;
+  background-color: rgb(21, 128, 61);
+  border-radius: 1rem;
+  color: white;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 1rem;
+  position: absolute;
+  right: 4rem;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  :hover {
+    background-color: rgb(22, 163, 74);
+  }
+`;
+
+const Home: NextPage<PlanetList> = (props) => {
+  const { results } = props;
+
+  const router = useRouter();
   return (
     <div className={styles.container}>
       <Head>
@@ -24,52 +72,27 @@ const Home: NextPage = () => {
       </Head>
 
       <MainStyled>
-        <h1 className="text-3xl font-bold underline">Tailwind Header</h1>
-
-        <p className={styles.description} test-id="getting started">
-          Get started by editing <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a href="https://github.com/vercel/next.js/tree/master/examples" className={styles.card}>
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-          </a>
-        </div>
+        <WishListButton onClick={() => router.push('/wishlist')}>
+          <Image src={HeartFilled} alt="My SVG Icon" width={12} height={12} />
+          Your Wishlist
+        </WishListButton>
+        <h1 className="transition text-6xl font-bold mb-8 text-white">Planet List</h1>
+        <ScrollList initialData={results} initialNextUrl={props.next} />
       </MainStyled>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
+};
+
+export const getServerSideProps = async () => {
+  const API_URL = 'https://swapi.dev/api/planets';
+  const response = await fetch(API_URL);
+  const initialData = await response.json();
+
+  console.log('count :', initialData.results.length);
+
+  return {
+    props: initialData
+  };
 };
 
 export default Home;

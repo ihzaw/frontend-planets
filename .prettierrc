@@ -3,5 +3,6 @@
   "singleQuote": true,
   "jsxSingleQuote": false,
   "printWidth": 100,
-  "semi": true
+  "semi": true,
+  "endOfLine": "crlf"
 }
