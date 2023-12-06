@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MainStyled } from '..';
 import styles from '@styles/Home.module.css';
 import { BackButton, ScrollList } from 'components';
 
 const WishList = () => {
-  const [wishLists, setWishLists] = useState(() => {
+  const [wishLists, setWishLists] = useState([]);
+
+  useEffect(() => {
     const rawWishLists = localStorage.getItem('wishLists');
     const localWishLists = rawWishLists ? JSON.parse(rawWishLists) : [];
 
-    return localWishLists.length > 10 ? localWishLists.slice(0, 10) : localWishLists;
-  });
+    setWishLists(localWishLists.length > 10 ? localWishLists.slice(0, 10) : localWishLists);
+  }, []);
 
   return (
     <div className={styles.container}>
