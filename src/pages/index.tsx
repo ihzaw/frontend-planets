@@ -3,8 +3,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styled from 'styled-components';
 import styles from '../styles/Home.module.css';
+import ScrollList from 'components/ScrollList';
 
-type Planet = {
+export type Planet = {
   name: string;
   diameter: string;
   rotation_period: string;
@@ -21,7 +22,7 @@ type Planet = {
   edited: string;
 };
 
-interface PlanetList {
+export interface PlanetList {
   count: number;
   next: string | null;
   previous: string | null;
@@ -49,8 +50,8 @@ const Home: NextPage<PlanetList> = (props) => {
       </Head>
 
       <MainStyled>
-        <h1 className="text-3xl font-bold">The Star Wars Planet List</h1>
-        <div>{JSON.stringify(results)}</div>
+        <h1 className="text-4xl font-bold mb-8 text-white">Planet List</h1>
+        <ScrollList initialData={results} />
       </MainStyled>
     </div>
   );
@@ -61,12 +62,10 @@ export const getServerSideProps = async () => {
   const response = await fetch(API_URL);
   const initialData = await response.json();
 
-  console.log('=> ', initialData);
+  console.log('count :', initialData.results.length);
 
   return {
-    props: {
-      initialData
-    }
+    props: initialData
   };
 };
 
