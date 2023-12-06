@@ -28,7 +28,7 @@ export interface PlanetList {
   results: Planet[];
 }
 
-const MainStyled = styled.main`
+export const MainStyled = styled.main`
   align-items: center;
   display: flex;
   flex: 1;
