@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { MainStyled } from '..';
 import styles from '@styles/Home.module.css';
-import ScrollList from 'components/ScrollList';
-import BackButton from 'components/BackButton';
+import { BackButton, ScrollList } from 'components';
 
 const WishList = () => {
   const [wishLists, setWishLists] = useState(() => {

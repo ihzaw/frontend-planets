@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import styled from 'styled-components';
 import styles from '../styles/Home.module.css';
-import ScrollList from 'components/ScrollList';
+import { ScrollList } from 'components';
 import HeartFilled from '../assets/svgs/heart-solid.svg';
 import Image from 'next/image';
 import { useRouter } from 'next/router';

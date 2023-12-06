@@ -2,12 +2,11 @@ import { GetServerSidePropsContext, NextPage } from 'next';
 import { MainStyled, Planet } from '../index';
 import styles from '@styles/Home.module.css';
 import { ParsedUrlQuery } from 'querystring';
-import SimpleCard from 'components/SimpleCard';
-import Heart from '../../assets/svgs/heart-regular.svg';
-import HeartFilled from '../../assets/svgs/heart-solid.svg';
+import Heart from 'assets/svgs/heart-regular.svg';
+import HeartFilled from 'assets/svgs/heart-solid.svg';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import BackButton from 'components/BackButton';
+import { BackButton, SimpleCard } from 'components';
 
 interface DetailPageProps {
   data: Planet;
