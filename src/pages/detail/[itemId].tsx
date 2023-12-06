@@ -9,6 +9,7 @@ import Heart from '../../assets/svgs/heart-regular.svg';
 import HeartFilled from '../../assets/svgs/heart-solid.svg';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import BackButton from 'components/BackButton';
 
 interface DetailPageProps {
   data: Planet;
@@ -47,12 +48,7 @@ const Detail: NextPage<DetailPageProps> = (props) => {
 
   return (
     <div className={styles.container}>
-      <button
-        onClick={() => router.back()}
-        className="rounded-full transition bg-slate-800 hover:bg-slate-400 p- w-16 h-16 flex justify-center items-center absolute left-10 top-12 text-white"
-      >
-        <ChevronLeft />
-      </button>
+      <BackButton />
       <MainStyled>
         <div className="flex justify-center items-center mb-8">
           <h1 className="text-white font-semibold text-6xl">{data.name}</h1>

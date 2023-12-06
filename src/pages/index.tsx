@@ -76,7 +76,7 @@ const Home: NextPage<PlanetList> = (props) => {
           <Image src={HeartFilled} alt="My SVG Icon" width={12} height={12} />
           Your Wishlist
         </WishListButton>
-        <h1 className="transition text-4xl font-bold mb-8 text-white">Planet List</h1>
+        <h1 className="transition text-6xl font-bold mb-8 text-white">Planet List</h1>
         <ScrollList initialData={results} initialNextUrl={props.next} />
       </MainStyled>
     </div>
