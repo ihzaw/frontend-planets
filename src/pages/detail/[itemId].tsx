@@ -1,10 +1,14 @@
-import { GetServerSideProps, GetServerSidePropsContext, NextPage } from 'next';
+import { GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { MainStyled, Planet } from '../index';
 import styles from '@styles/Home.module.css';
 import { ParsedUrlQuery } from 'querystring';
 import SimpleCard from 'components/SimpleCard';
 import { ChevronLeft } from 'react-feather';
+import Heart from '../../assets/svgs/heart-regular.svg';
+import HeartFilled from '../../assets/svgs/heart-solid.svg';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 interface DetailPageProps {
   data: Planet;
@@ -14,6 +18,32 @@ const Detail: NextPage<DetailPageProps> = (props) => {
   const { data } = props;
   const formattedPopulation = data.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   const router = useRouter();
+  const [wishLists, setWishLists] = useState<Planet[]>(() => {
+    const rawWishLists = localStorage.getItem('wishLists');
+    const localWishLists = rawWishLists ? JSON.parse(rawWishLists) : [];
+
+    return localWishLists;
+  });
+
+  useEffect(() => {
+    const serializedState = JSON.stringify(wishLists);
+    localStorage.setItem('wishLists', serializedState);
+  }, [wishLists]);
+
+  const handleClickWishList = () => {
+    const filtered = wishLists.filter((planet: Planet) => planet.name === data.name);
+    if (filtered.length > 0) {
+      const newSavedWishLists = wishLists.filter((planet: Planet) => planet.name !== data.name);
+      setWishLists(newSavedWishLists);
+      return;
+    }
+
+    const newSavedWishLists = [...wishLists];
+    newSavedWishLists.push(data);
+    setWishLists(newSavedWishLists);
+  };
+
+  const isWishListed = wishLists.find((planet: Planet) => planet.name === data.name);
 
   return (
     <div className={styles.container}>
@@ -24,7 +54,19 @@ const Detail: NextPage<DetailPageProps> = (props) => {
         <ChevronLeft />
       </button>
       <MainStyled>
-        <h1 className="text-white font-semibold text-6xl mb-8">{data.name}</h1>
+        <div className="flex justify-center items-center mb-8">
+          <h1 className="text-white font-semibold text-6xl">{data.name}</h1>
+          <button
+            className="ml-4 flex justify-center items-center w-8 h-8"
+            onClick={handleClickWishList}
+          >
+            {isWishListed ? (
+              <Image src={HeartFilled} alt="My SVG Icon" width={28} height={28} />
+            ) : (
+              <Image src={Heart} alt="My SVG Icon" width={28} height={28} />
+            )}
+          </button>
+        </div>
         <div className="grid grid-cols-12 gap-4 w-full">
           <div className="col-start-3 col-span-2">
             <SimpleCard label="Climate" description={data.climate} />
