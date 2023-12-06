@@ -41,23 +41,42 @@ const Detail: NextPage<DetailPageProps> = (props) => {
   };
 
   const isWishListed = wishLists.find((planet: Planet) => planet.name === data.name);
+  const formatDate = (date: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    };
+    const outputDate = new Date(date).toLocaleDateString('en-US', options);
+    return outputDate;
+  };
 
   return (
     <div className={styles.container}>
       <BackButton />
       <MainStyled>
-        <div className="flex justify-center items-center mb-8">
-          <h1 className="text-white font-semibold text-6xl">{data.name}</h1>
-          <button
-            className="ml-4 flex justify-center items-center w-8 h-8"
-            onClick={handleClickWishList}
-          >
-            {isWishListed ? (
-              <Image src={HeartFilled} alt="My SVG Icon" width={28} height={28} />
-            ) : (
-              <Image src={Heart} alt="My SVG Icon" width={28} height={28} />
-            )}
-          </button>
+        <div className="flex justify-center items-center">
+          <div className="italic mb-8">
+            <h1 className="text-white font-semibold text-6xl inline-flex items-center">
+              {data.name}
+              <span>
+                <button
+                  className="ml-4 flex justify-center items-center w-8 h-8"
+                  onClick={handleClickWishList}
+                >
+                  {isWishListed ? (
+                    <Image src={HeartFilled} alt="My SVG Icon" width={28} height={28} />
+                  ) : (
+                    <Image src={Heart} alt="My SVG Icon" width={28} height={28} />
+                  )}
+                </button>
+              </span>
+            </h1>
+            <p>created at :</p>
+            <p>{formatDate(data.created)}</p>
+          </div>
         </div>
         <div className="grid grid-cols-12 gap-4 w-full">
           <div className="col-start-3 col-span-2">
@@ -70,7 +89,7 @@ const Detail: NextPage<DetailPageProps> = (props) => {
             <SimpleCard label="Diameter" description={`${data.diameter} Km`} />
           </div>
           <div className="col-span-full">
-            <div className="bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-40 border border-gray-100 grid grid-cols-12">
+            <div className="bg-gray-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-40 border border-gray-100 grid grid-cols-12 gap-4">
               <div className="col-start-2 col-span-2">
                 <SimpleCard label="Population" description={`${formattedPopulation} people`} />
               </div>
