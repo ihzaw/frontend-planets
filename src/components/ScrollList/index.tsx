@@ -16,10 +16,11 @@ const GridContainer = styled.div`
 interface ScrollListProps {
   initialData: Array<Planet>;
   initialNextUrl: string | null;
+  clientPagination?: boolean;
 }
 
 const ScrollList: NextPage<ScrollListProps> = (props) => {
-  const { initialData, initialNextUrl } = props;
+  const { initialData, initialNextUrl, clientPagination } = props;
 
   const [renderedData, setRenderedData] = useState<Array<Planet>>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -47,17 +48,49 @@ const ScrollList: NextPage<ScrollListProps> = (props) => {
       });
     } catch (error) {
       console.error('Error fetching more data:', error);
+      setError('error');
     }
   }, [nextUrl]);
+
+  const loadClientData = useCallback(async () => {
+    try {
+      const rawWishLists = localStorage.getItem('wishLists');
+      const parsedData = rawWishLists ? JSON.parse(rawWishLists) : [];
+
+      const currentLength = renderedData.length;
+
+      if (currentLength < parsedData.length) {
+        const difference = parsedData.length - currentLength;
+        let newItems = [];
+        if (difference > 0 && difference <= 10) {
+          newItems = parsedData.slice(currentLength, currentLength + difference);
+        }
+        if (difference > 10) {
+          newItems = parsedData.slice(currentLength, currentLength + 10);
+        }
+        const newRenderedData = [...renderedData, ...newItems];
+        setRenderedData(newRenderedData);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Error fetching more data:', error);
+      setError('error');
+    }
+  }, [renderedData]);
 
   const handleIntersection = useCallback(
     async (entries: IntersectionObserverEntry[]) => {
       const entry = entries[0];
       if (entry.isIntersecting && hasMore) {
+        if (clientPagination) {
+          await loadClientData();
+          return;
+        }
         await loadMoreData();
       }
     },
-    [loadMoreData, hasMore]
+    [loadMoreData, hasMore, clientPagination, loadClientData]
   );
 
   useEffect(() => {

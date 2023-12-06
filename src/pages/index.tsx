@@ -3,6 +3,9 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import styles from '../styles/Home.module.css';
 import ScrollList from 'components/ScrollList';
+import HeartFilled from '../assets/svgs/heart-solid.svg';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export type Planet = {
   name: string;
@@ -38,8 +41,28 @@ export const MainStyled = styled.main`
   padding: 4rem 0;
 `;
 
+const WishListButton = styled.button`
+  align-items: center;
+  background-color: rgb(21, 128, 61);
+  border-radius: 1rem;
+  color: white;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 1rem;
+  position: absolute;
+  right: 4rem;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  :hover {
+    background-color: rgb(22, 163, 74);
+  }
+`;
+
 const Home: NextPage<PlanetList> = (props) => {
   const { results } = props;
+
+  const router = useRouter();
   return (
     <div className={styles.container}>
       <Head>
@@ -49,7 +72,11 @@ const Home: NextPage<PlanetList> = (props) => {
       </Head>
 
       <MainStyled>
-        <h1 className="text-4xl font-bold mb-8 text-white">Planet List</h1>
+        <WishListButton onClick={() => router.push('/wishlist')}>
+          <Image src={HeartFilled} alt="My SVG Icon" width={12} height={12} />
+          Your Wishlist
+        </WishListButton>
+        <h1 className="transition text-4xl font-bold mb-8 text-white">Planet List</h1>
         <ScrollList initialData={results} initialNextUrl={props.next} />
       </MainStyled>
     </div>
