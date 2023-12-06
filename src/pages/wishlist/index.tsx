@@ -3,7 +3,6 @@ import { MainStyled } from '..';
 import styles from '@styles/Home.module.css';
 import ScrollList from 'components/ScrollList';
 import BackButton from 'components/BackButton';
-import { AlertTriangle } from 'react-feather';
 
 const WishList = () => {
   const [wishLists, setWishLists] = useState(() => {

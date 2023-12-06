@@ -1,10 +1,8 @@
 import { GetServerSidePropsContext, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { MainStyled, Planet } from '../index';
 import styles from '@styles/Home.module.css';
 import { ParsedUrlQuery } from 'querystring';
 import SimpleCard from 'components/SimpleCard';
-import { ChevronLeft } from 'react-feather';
 import Heart from '../../assets/svgs/heart-regular.svg';
 import HeartFilled from '../../assets/svgs/heart-solid.svg';
 import Image from 'next/image';
@@ -18,7 +16,6 @@ interface DetailPageProps {
 const Detail: NextPage<DetailPageProps> = (props) => {
   const { data } = props;
   const formattedPopulation = data.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  const router = useRouter();
   const [wishLists, setWishLists] = useState<Planet[]>(() => {
     const rawWishLists = localStorage.getItem('wishLists');
     const localWishLists = rawWishLists ? JSON.parse(rawWishLists) : [];
