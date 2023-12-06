@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import styled from 'styled-components';
 import styles from '../styles/Home.module.css';
 import ScrollList from 'components/ScrollList';
@@ -51,7 +50,7 @@ const Home: NextPage<PlanetList> = (props) => {
 
       <MainStyled>
         <h1 className="text-4xl font-bold mb-8 text-white">Planet List</h1>
-        <ScrollList initialData={results} />
+        <ScrollList initialData={results} initialNextUrl={props.next} />
       </MainStyled>
     </div>
   );
